@@ -1,5 +1,4 @@
 import codecs, cStringIO, encodings, tokenize
-import traceback
 from encodings import utf_8
 
 class BracesStreamReader(utf_8.StreamReader):
