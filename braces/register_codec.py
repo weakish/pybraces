@@ -17,14 +17,17 @@ class BracesStreamReader(utf_8.StreamReader):
         # Ignore indenting
         if tok_type in (tokenize.INDENT, tokenize.DEDENT):
             return
+        # Ignore `:`
+        if tok_type == tokenize.OP and tok_str == ':':
+            return
 
-        if tok_type == tokenize.OP:
-            if tok_str == '{':
+        if tok_type == tokenize.COMMENT:
+            if tok_str == '#{' or tok_str == '# {':
                 tok_type = tokenize.INDENT
                 self._indent += 1
                 tok_str = '  ' * self._indent
                 self._tokens.append((tokenize.COLON, ':'))
-            elif tok_str == '}':
+            elif tok_str == '#}' or tok_str == '# }':
                 tok_type = tokenize.DEDENT
                 self._indent -= 1
 
