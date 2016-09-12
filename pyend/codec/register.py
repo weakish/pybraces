@@ -1,5 +1,12 @@
-import codecs, cStringIO, encodings, tokenize
+import codecs
+import encodings
+import tokenize
 from encodings import utf_8
+
+try:
+    from cStringIO import StringIO
+except ImportError:
+    from io import StringIO
 
 class EndStreamReader(utf_8.StreamReader):
     def __init__(self, *args, **kwargs):
@@ -10,7 +17,7 @@ class EndStreamReader(utf_8.StreamReader):
         tokenize.tokenize(self.stream.readline, self._handle_token)
         data = tokenize.untokenize(self._tokens)
 
-        self.stream = cStringIO.StringIO(data)
+        self.stream = StringIO(data)
 
     def _handle_token(self, tok_type, tok_str, start_pos, end_pos, lineno):
         # Ignore indenting
